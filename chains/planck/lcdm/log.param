@@ -1,0 +1,97 @@
+#-----Class v2.0.4 (subversion exported)-----
+
+#------Experiments to test (separated with commas)-----
+
+# valid options are (so far): acbar, bicep, boomerang, cbi,
+# hst, quad, sn, spt, fake_planck_bluebook,
+# euclid_pk, euclid_lensing
+# and clik_fake_planck (for Planck members)
+
+data.experiments=['fake_planck_bluebook']
+#data.experiments=['wmap','spt']
+
+#------ Parameter list -------
+# data.parameters[class name] = [mean, min, max, 1-sigma, scale, role]
+# - if min max irrelevant, put to -1 or None (if you want a boundary of -1, use -1.0)
+# - if fixed, put 1-sigma to 0
+# - if scale irrelevant, put to 1, otherwise to the appropriate factor
+# - role is either 'cosmo', 'nuisance' or 'derived'
+
+
+# Cosmological parameters list
+data.parameters['omega_b'] 	= [2.249,  -1,-1, 0.016, 0.01,'cosmo']
+data.parameters['omega_cdm'] 	= [0.1120, -1,-1, 0.0016,1,   'cosmo']
+data.parameters['n_s']       	= [0.963,  -1,-1, 0.004, 1,   'cosmo']
+data.parameters['A_s']       	= [2.42,   -1,-1, 0.038, 1e-9,'cosmo']
+data.parameters['h']         	= [0.703,  -1,-1, 0.0065,1,   'cosmo']
+data.parameters['tau_reio']    	= [0.085,  -1,-1, 0.0044,1,   'cosmo']
+data.parameters['N_eff']        = [2.046,   0,10, 0.4, 1,     'cosmo']
+
+# Nuisance parameter list, same call, except the name does not have to be a class name
+# For wmap:
+#data.parameters['A_SZ']         = [1,    0, 2,   1, 1,  'nuisance']
+# For SPT
+#data.parameters['SPT_SZ']       = [5.6,  0,-1, 2.5, 1,  'nuisance']
+#data.parameters['SPT_PS']       = [20.4,-1,-1, 2.7, 1, 'nuisance']
+#data.parameters['SPT_CL']       = [5.3, -1,-1, 2.3, 1, 'nuisance']
+
+# Derived parameter list
+data.parameters['z_reio']       = [0,       -1, -1, 0,1,  'derived']
+data.parameters['Omega_Lambda'] = [0,       -1, -1, 0,1,  'derived']
+
+# Other class parameters (fixed parameters, precision parameters, etc.)
+data.cosmo_arguments['sBBN file'] = data.path['cosmo']+'/bbn/sBBN.dat'
+
+
+#------ Mcmc parameters ----
+# Number of steps taken, by default (overwritten by the -N command)
+data.N=10
+# Number of accepted steps before writing to file the chain. Larger means less
+# access to disc, but this is not so much time consuming.
+data.write_step=5
+
+
+#-----Likelihood-fake_planck_bluebook-----
+# Here, Planck is modelled as in the bluebook:
+#
+# http://www.rssd.esa.int/SA/PLANCK/docs/Bluebook-ESA-SCI(2005)1_V2.pdf
+# page 4, Table 1.1 (only the best three HFI channels: 100, 143 and 217 GHz)
+#
+# This is a rather conservative model since the sensitivities are
+# based on 14 months of observations instead of 30
+
+# where to read/write fiducial model:
+
+fake_planck_bluebook.data_directory     = data.path['data']
+fake_planck_bluebook.fiducial_file      = 'fake_planck_bluebook_fiducial.dat'
+
+# experimental sensitivity:
+
+fake_planck_bluebook.l_min              = 2
+fake_planck_bluebook.l_max              = 2500
+fake_planck_bluebook.f_sky              = 0.65
+fake_planck_bluebook.num_channels       = 3
+
+# angular resolution
+# theta_fwhm must be in in arcmin
+
+fake_planck_bluebook.theta_fwhm = [10., 7.1, 5.0]
+
+# resolution for Temperature and Polarisation
+# sigma's must be in muK.arcmin
+# (with respect to Table 1.1 in bluebook, obtained by mutiplying
+# angular resolution * DT/T * 2.726 )
+
+fake_planck_bluebook.sigma_T = [68.1, 42.6, 65.4]
+fake_planck_bluebook.sigma_P = [109.4, 81.3, 133.6]
+
+
+#-----------Cosmological-arguments---------
+data.cosmo_arguments.update({'l_max_scalars': 2500, 'output': ' tCl lCl pCl ', 'sBBN file': '/Users/joanes/Desktop/code/class//bbn/sBBN.dat', 'lensing': ' yes '})
+
+
+#--------Default-Configuration------
+data.path['cosmo']	= '/Users/joanes/Desktop/code/class/'
+data.path['data']	= '/Users/joanes/Desktop/code/montepython/data/'
+data.path['clik']	= '/Users/joanes/Desktop/code/Planck/plc-1.0/'
+data.path['MontePython']	= '/Users/joanes/Desktop/code/montepython/code/'

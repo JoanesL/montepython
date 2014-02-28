@@ -362,7 +362,7 @@ class data(object):
         array.append(len(self.get_mcmc_parameters(['varying', 'cosmo'])))
         # Then, store all nuisance parameters
         nuisance = self.get_mcmc_parameters(['varying', 'nuisance'])
-
+        print 'JL 2014 Nuisance', nuisance,'aberba'
         for likelihood in self.lkl.itervalues():
             count = 0
             for elem in nuisance:
@@ -537,6 +537,10 @@ class data(object):
                 self.cosmo_arguments['n_cdi'] = self.cosmo_arguments['n_s']
             if elem == 'beta':
                 self.cosmo_arguments['alpha'] = 2.*self.cosmo_arguments['beta']
+            #JL
+            #Hemen aldatu daiteke, Neff izatea sokek emandakoa + MCMC-ak mugitzen duena
+            #if elem == 'N_eff':
+            #    self.cosmo_arguments['N_eff'] = self.cosmo_arguments['N_eff']+2.0
             # We only do that on xe_1, for there is at least one of them.
             if elem.find('xe_1') != -1:
                 # To pass this option, you must have set a number of

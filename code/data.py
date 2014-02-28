@@ -362,7 +362,11 @@ class data(object):
         array.append(len(self.get_mcmc_parameters(['varying', 'cosmo'])))
         # Then, store all nuisance parameters
         nuisance = self.get_mcmc_parameters(['varying', 'nuisance'])
-
+        #JL Read Gmu as a new type of parameter, normalization parameter
+        #This prevents Gmu from being considered as a nuisance parameter and stored as an likelihood parameter
+        #which actually is not true.
+        normalization = self.get_mcmc_parameters(['varying', 'norm'])
+        print 'JL 2014 Norm? ', normalization,'aberba'
         for likelihood in self.lkl.itervalues():
             count = 0
             for elem in nuisance:
@@ -537,6 +541,7 @@ class data(object):
                 self.cosmo_arguments['n_cdi'] = self.cosmo_arguments['n_s']
             if elem == 'beta':
                 self.cosmo_arguments['alpha'] = 2.*self.cosmo_arguments['beta']
+            #JL
             #Hemen aldatu daiteke, Neff izatea sokek emandakoa + MCMC-ak mugitzen duena
             #if elem == 'N_eff':
             #    self.cosmo_arguments['N_eff'] = self.cosmo_arguments['N_eff']+2.0

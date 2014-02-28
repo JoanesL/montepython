@@ -210,20 +210,6 @@ class likelihood(object):
                     for i in range(1, len(value)):
                         data.cosmo_arguments[key] += ',%.2g' % (value[i])
 
-    #JL 2014 Read string spectrum
-    #def read_string_spectra(self, data):
-    #    exec "string_spectra=np.zeros(self.l_max+1, 'float64')"
-    #    exec "string_spectra=np.zeros(self.l_max+1, 'float64')"
-    #    exec "string_spectra=np.zeros(self.l_max+1, 'float64')"
-    #    exec "string_spectra=np.zeros(self.l_max+1, 'float64')"
-
-    #    exec "FileGmu = open(self.data_directory+"SUM_001-300.dat", 'r')"
-    #    for line in FileGmu:
-    #        Cls = line.split()
-    #        for type in [:
-
-
-
     def read_contamination_spectra(self, data):
 
         for nuisance in self.use_nuisance:
@@ -279,22 +265,20 @@ class likelihood(object):
             # add contamination spectra multiplied by nuisance parameters
             for l in range(2, self.l_max):
                 exec "cl['tt'][l] += nuisance_value*self.%s_contamination[l]" % nuisance
+
         return cl
     
     #JO 2014
-    def add_string_spectra(self, cl, data):
+    #def add_string_spectra(self, cl, data):
         #Add string spectra normalized with (Gmu)^2
-        #for norm in self.normalization:
-        norm_value = float( 
-            data.mcmc_parameters[normalization]['current'] * 
-            data.mcmc_parameters[normalization]['scale'])
-        print 'JL',norm_value
-            # add normalized spectra
-        for l in range(2, self.l_max):
-            for key in cl.iterkeys():
-                exec "cl[key][l] += norm_value*self.%s_contamination[l]"
-            
-        return cl
+        
+        #HEMEN MODUN BATEA IRAKURRI BEHARKO DO GMU, NUISANCE PARAMETER-EN ARTEAN
+        
+        # add normalized spectra
+        # for l in range(2, self.l_max):
+        #     exec "cl['tt'][l] += nuisance_value*self.%s_contamination[l]"
+
+        # return cl
 
     def add_nuisance_prior(self, lkl, data):
 
